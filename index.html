@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NoctrIA</title>
     <link rel="stylesheet" href="estilos/style.css">
+    <script src="https://kit.fontawesome.com/2ddaec0f4b.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <header>
@@ -22,11 +22,11 @@
     </header>
 
     <menu id="settings">
-        <a href="#">Dashboard</a>
-        <a href="#">Criar resumo</a>
-        <a href="#">Gerar quiz</a>
-        <a href="#">Meus estudos</a>
-        <a href="#">Configurações</a>
+        <a href="#"><i class="fa-solid fa-sliders"></i> Dashboard</a>
+        <a href="#"><i class="fa-regular fa-file"></i> Criar resumo</a>
+        <a href="#"><i class="fa-solid fa-puzzle-piece"></i> Gerar quiz</a>
+        <a href="#"><i class="fa-solid fa-book"></i> Meus estudos</a>
+        <a href="#"><i class="fa-solid fa-gear"></i> Configurações</a>
     </menu>
 
     <main id="container">
@@ -35,41 +35,11 @@
             <p>Insira seu conteúdo abaixo e deixe a Noctech transformar suas informações em conhecimento.</p>
         </div>
         <div id="input">
-            <form action="#" method="post">
-                <input type="text" name="text" id="itext">
+            <form id="form">
+                <input type="text" name="text" id="itext" placeholder="Insira seu conteúdo">
                 <input type="submit" value="Gerar" id="ibutton">
             </form>
         </div>
     </main>
-
-
-
-
-
-    <!--<main id="container">
-        <nav class="links"></nav>
-            <div class="titulo">
-                <h2>NoctrIA</h2>
-                <a href="#"></a>
-                <a href="#"></a>
-            </div>
-            <nav>
-                <a href="#">Novo Chat</a>
-                <a href="#">Imagens</a>
-                <a href="#">Biblioteca</a>
-                <a href="#">Projetos</a>
-                <a href="#">Mais</a>
-                <a href="#"></a>
-            </nav>
-        </nav>
-        <section class="msg">
-            <h1>Falae CHEFE</h1>
-            <div class="text-area">
-                <input type="text" placeholder="Oque tu quer?">
-                <input type="submit" value="Mandar">
-            </div>
-        </section>
-    </main>-->
 </body>
-
 </html>
