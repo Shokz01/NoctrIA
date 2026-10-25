@@ -137,9 +137,16 @@ div#input > form {
     height: 100%;
 }
 
-div#input input#itext {
+div#input textarea#itext {
     height: 75%;
     width: 80%;
+
+    resize: vertical;
+    font-family: inherit;
+
+    
+    text-align: left;
+    line-height: 1.5;
 
     padding: 15px;
     color: var(--text);
@@ -149,13 +156,13 @@ div#input input#itext {
     background-color: var(--surface);
 }
 
-div#input input#itext:focus {
+div#input textarea#itext:focus {
     background-color: var(--background);
     outline: none;
     transition: .1s;
 }
 
-div#input input#ibutton {
+div#input button#ibutton {
     height: 75%;
     width: 20%;
 
@@ -166,8 +173,27 @@ div#input input#ibutton {
     font-weight: 600;
 }
 
-div#input input#ibutton:hover {
+div#input button#ibutton:hover {
     background-color: var(--text);
     color: var(--background);
     transition: .2s;
+}
+
+#result {
+    grid-area: 4 / 2 / 6 / 3;
+    margin-top: 20px;
+    padding: 16px;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text);
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+
+#settings > a.active {
+    background-color: var(--accent);
+    color: #FFFFFF;
+    border-radius: 8px;
 }
