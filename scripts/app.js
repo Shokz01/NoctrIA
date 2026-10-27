@@ -89,7 +89,59 @@ form.addEventListener("submit", async (event) => {
     } catch (error) {
         result.textContent = `Erro: ${error.message}`;
     }
+
 } else {
-    result.textContent = "A geração de quizzes será implementada depois.";
+    result.textContent = "Gerando quiz...";
+
+    try {
+        const response = await fetch("http://127.0.0.1:8000/quiz", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ texto })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.detail || "Erro ao gerar quiz.");
+        }
+
+        if (data.erro) {
+            throw new Error(data.erro);
+        }
+
+        if (!Array.isArray(data.perguntas)) {
+            throw new Error("A resposta da API não contém uma lista de perguntas.");
+        }
+
+        result.replaceChildren();
+
+        data.perguntas.forEach((pergunta, index) => {
+            const bloco = document.createElement("div");
+            const titulo = document.createElement("h3");
+            const alternativas = document.createElement("ul");
+            const gabarito = document.createElement("p");
+
+            titulo.textContent = `${index + 1}. ${pergunta.pergunta}`;
+
+            pergunta.alternativas.forEach((alternativa) => {
+                const item = document.createElement("li");
+                item.textContent = alternativa;
+                alternativas.appendChild(item);
+            });
+
+            gabarito.textContent =
+                `Resposta esperada: ${pergunta.resposta_correta}`;
+
+            bloco.append(titulo, alternativas, gabarito);
+            result.appendChild(bloco);
+        });
+
+    } catch (error) {
+        result.textContent = `Erro: ${error.message}`;
+    }
 }
+
 });
