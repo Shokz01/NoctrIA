@@ -92,25 +92,50 @@ def gerar_quiz(dados: TextoEntrada):
         return {"erro": "Digite um texto para gerar o quiz."}
 
     mensagens = [
-    {"role": "system", "content": (
-        "Você é um professor especialista em criar quizzes educativos. "
-        "Use exclusivamente as informações presentes no texto fornecido. "
-        "Não invente fatos, nomes, definições, números ou explicações. "
-        "Antes de criar cada pergunta, confirme que a resposta pode ser "
-        "encontrada claramente no texto. Se não puder, escolha outro assunto "
-        "que esteja explicitamente explicado no texto. "
-        "Crie perguntas claras, relevantes e diferentes entre si. "
-        "Cada pergunta deve ter exatamente quatro alternativas plausíveis, "
-        "identificadas por A), B), C) e D), com apenas uma resposta correta. "
-        "Todas as alternativas devem estar relacionadas ao assunto, mas "
-        "somente uma deve responder corretamente à pergunta conforme o texto. "
-        "Não crie alternativas absurdas ou com termos inventados. "
-        "Use português brasileiro correto e natural. "
-        "Não misture português com inglês sem necessidade. "
-        "Distribua as letras das respostas corretas entre A, B, C e D "
-        "sempre que possível. "
-        "Responda exclusivamente com JSON válido, sem Markdown ou explicações extras."
-    )},
+    {
+    "role": "system",
+    "content": """
+Você é um professor especialista em criar questões educacionais.
+
+Sua tarefa é criar exatamente 5 perguntas de múltipla escolha com base EXCLUSIVAMENTE no texto fornecido pelo usuário.
+
+REGRAS OBRIGATÓRIAS:
+
+1. Todas as perguntas devem ser respondíveis usando informações presentes no texto.
+2. Nunca invente informações, dados, explicações ou acontecimentos.
+3. Não faça perguntas sobre informações que não aparecem no texto.
+4. Cada pergunta deve abordar um aspecto diferente do conteúdo.
+5. Cada pergunta deve possuir exatamente 4 alternativas.
+6. As alternativas devem ser identificadas como A), B), C) e D).
+7. Apenas uma alternativa pode estar correta.
+8. As alternativas incorretas devem ser plausíveis e relacionadas ao assunto.
+9. Nunca repita alternativas.
+10. Não use palavras ou conceitos aleatórios que não tenham relação com o texto.
+11. A resposta_correta deve conter somente a letra da alternativa correta: A, B, C ou D.
+12. Revise todas as perguntas e respostas antes de finalizar.
+
+FORMATO DE SAÍDA:
+
+Retorne exclusivamente um JSON válido, sem Markdown, sem explicações e sem texto adicional.
+
+Use exatamente esta estrutura:
+
+{
+    "perguntas": [
+        {
+            "pergunta": "Texto da pergunta",
+            "alternativas": [
+                "A) Alternativa",
+                "B) Alternativa",
+                "C) Alternativa",
+                "D) Alternativa"
+            ],
+            "resposta_correta": "A"
+        }
+    ]
+}
+"""
+},
         {
             "role": "user",
             "content": (
@@ -148,34 +173,23 @@ def gerar_quiz(dados: TextoEntrada):
         skip_special_tokens=True
     ).strip()
 
+    # Remove blocos Markdown que o modelo pode adicionar
+    resposta = resposta.strip()
+
+    if resposta.startswith("```"):
+        linhas = resposta.splitlines()
+
+        if linhas[0].startswith("```"):
+            linhas = linhas[1:]
+
+        if linhas and linhas[-1].strip() == "```":
+            linhas = linhas[:-1]
+
+        resposta = "\n".join(linhas).strip()
+
     print("RESPOSTA BRUTA DO QUIZ:")
     print(resposta)
 
-    print("Tokens gerados:", len(novos_tokens))
-    print("Limite configurado:", 700)
-    print("Fim da resposta:", repr(resposta[-80:]))
-
-    if resposta.startswith('{"perguntas"') and resposta.endswith('}}'):
-        resposta = resposta[:-1] + ']}'
-    elif resposta.startswith('{"perguntas"') and resposta.endswith('}]'):
-        resposta += '}'
-
-    print(repr(resposta))
-    print("Tamanho da resposta:", len(resposta))
-    print("Caractere 698:", repr(resposta[698:710]))
-
-    try:
-        json.loads(resposta)
-        print("JSON válido!")
-    except json.JSONDecodeError as erro:
-        print("Erro JSON:", erro)
-        print("Trecho do erro:", repr(resposta[erro.pos - 40:erro.pos + 40]))
-
-    print("Últimos códigos:", [ord(c) for c in resposta[-10:]])
-    print("Último caractere:", repr(resposta[-1]))
-
-    
-    
     try:
         quiz = json.loads(resposta)
 
